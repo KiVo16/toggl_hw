@@ -1,0 +1,116 @@
+
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Toggl API
+  description: Documentation for Toggl API
+  contact:
+    name: Toggl
+servers:
+  - url: http://{hostname}/api/v1
+    variables:
+      hostname:
+        default: localhost
+paths:
+  /questions:
+    post:
+      operationId: createQuestion
+      summary: Create Question
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Question'
+      responses:
+        '201':
+          description: Question created
+    get:
+      operation: getQuestions
+      summary: Get Questions
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+        - in: query
+          name: offset
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Question'     
+
+  /questions/{id}:
+    delete: 
+      operationId: deleteQuestion
+      summary: Delete Question
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Question Deleted
+    patch:
+      operationId: updateQuestion
+      summary: Update Question      
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Question'
+      responses:
+        '200':
+          description: Question updated
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Question:
+      type: object
+      required:
+        - body
+      properties:
+        id:
+          type: integer
+        body:
+          type: string
+        options:
+          type: array
+          items: 
+            $ref: '#/components/schemas/Option'
+          description: Options associated with question
+
+        
+    Option:
+      type: object
+      required:
+        - body
+        - correct
+      properties:
+        id: 
+          type: integer
+        body: 
+          type: string
+        correct:
+          type: boolean
+
+
