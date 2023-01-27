@@ -31,7 +31,7 @@ The endpoint is provided at `PATCH` method in order to enable partial updates. F
 # Authentication
 API uses JWT token to authenticate users. Token needs to have `"user_id": int (> 0)` as a claim in order to work. 
 
-Token providing method depending on `Mode (grpc, http)`
+Token providing method depends on `Mode (grpc, http)`
 |   Mode             |Method     |
 |----------------|---------|
 | `http` | `Authorization` as Bearer token|
