@@ -19,7 +19,7 @@ Specific configuration options can be provided in .yaml file or by environmental
 API documentation generated from OpenAPI definition
 https://pretty-lizard-62.redoc.ly/
 
-# Testing
+# Testing and Structure
 API contains 2 use case tests. It's a very simple crud so there is not much to test (a small amount of logic). My implementation is overcomplicated for such a simple API but I wanted to demonstrate how I would approach writing more complex APIs. Because of such a structure, it's easy to e.g. replace SQLite with Postgres. 
 
 # SQLite3
