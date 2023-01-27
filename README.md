@@ -29,7 +29,7 @@ API enables `Foreign Key` support on every connection, so in order to properly d
 The endpoint is provided at `PATCH` method in order to enable partial updates. For example, the body might be updated without updating options.
 
 # Authentication
-API uses JWT token to authenticate users. Token needs to have `user_id` as a claim in order to work. 
+API uses JWT token to authenticate users. Token needs to have `"user_id": int` as a claim in order to work. 
 
 Token providing method depending on `Mode (grpc, http)`
 |   Mode             |Method     |
