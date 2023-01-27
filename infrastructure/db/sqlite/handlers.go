@@ -50,8 +50,11 @@ func (db SQLiteDB) GetQuestions(ctx context.Context, userId int, pages paginatio
 	err := db.sql.NewSelect().
 		Model(&list).
 		Where("user_id = ?", userId).
-		Relation("Options").
-		Order("id ASC").
+		Relation("Options", func(s *bun.SelectQuery) *bun.SelectQuery {
+			s = s.Order("qo.id ASC")
+			return s
+		}).
+		Order("q.id ASC").
 		Limit(limit).
 		Offset(offset).
 		Scan(ctx)

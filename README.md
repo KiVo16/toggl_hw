@@ -19,7 +19,7 @@ Specific configuration options can be provided in .yaml file or by environmental
 API documentation generated from OpenAPI definition
 https://pretty-lizard-62.redoc.ly/
 
-# Testing and Structure
+# Testing
 API contains 2 use case tests. It's a very simple crud so there is not much to test (a small amount of logic). My implementation is overcomplicated for such a simple API but I wanted to demonstrate how I would approach writing more complex APIs. Because of such a structure, it's easy to e.g. replace SQLite with Postgres. 
 
 # SQLite3
@@ -28,6 +28,14 @@ API enabled `Foreign Key` support on every connection, so in order to properly d
 # Question updates
 The endpoint is provided at `PATCH` method in order to enable partial updates. For example, the body might be updated without updating options.
 
+# Authentication
+API uses JWT token to authenticate users. Token needs to have `user_id` as a claim in order to work. 
+
+Token providing method depending on `Mode (grpc, http)`
+|   Mode             |Method     |
+|----------------|---------|
+| `http` | `Authorization` as Bearer token|
+| `grpc` | Pass token in `authorization` metadata|
 # How to start?
 
        git clone https://github.com/KiVo16/toggl_hw.git

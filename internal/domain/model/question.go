@@ -17,8 +17,20 @@ type QuestionList = []Question
 func (q Question) Validate() error {
 
 	// it's just for an example - it probably should accept generating question without options
-	if len(q.Options) == 0 {
+	if len(q.Options) < 2 {
 		return e.ErrQuestionMissingOptions
+	}
+
+	isOneCorrect := false
+	for _, o := range q.Options {
+		if o.Correct {
+			isOneCorrect = true
+			break
+		}
+	}
+
+	if !isOneCorrect {
+		return e.ErrQuestionMissingCorrectOption
 	}
 
 	if q.UserID == 0 {

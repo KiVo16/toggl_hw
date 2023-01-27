@@ -70,7 +70,7 @@ func main() {
 	defer cancelShutdown()
 
 	if err := serverShutDownFunction(ctx); err != nil {
-		log.Fatalf("Server gracefull shutdown failed: %v", err)
+		log.Fatalf("[server] gracefull shutdown failed: %v", err)
 	}
 
 	cancelMainCtx()

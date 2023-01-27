@@ -8,11 +8,12 @@ import (
 )
 
 var errorsStatusCodesMap = map[error]int{
-	e.ErrQuestionEmptyBody:      http.StatusBadRequest,
-	e.ErrQuestionMissingOptions: http.StatusBadRequest,
-	e.ErrOptionEmptyBody:        http.StatusBadRequest,
-	e.ErrQuestionUserIDZero:     http.StatusBadRequest,
-	e.ErrQuestionNotFound:       http.StatusNotFound,
+	e.ErrQuestionEmptyBody:            http.StatusBadRequest,
+	e.ErrQuestionMissingOptions:       http.StatusBadRequest,
+	e.ErrQuestionMissingCorrectOption: http.StatusBadRequest,
+	e.ErrOptionEmptyBody:              http.StatusBadRequest,
+	e.ErrQuestionUserIDZero:           http.StatusBadRequest,
+	e.ErrQuestionNotFound:             http.StatusNotFound,
 }
 
 type HttpError struct {

@@ -10,11 +10,12 @@ import (
 )
 
 var errorsStatusCodesMap = map[error]codes.Code{
-	e.ErrQuestionEmptyBody:      codes.InvalidArgument,
-	e.ErrQuestionMissingOptions: codes.InvalidArgument,
-	e.ErrOptionEmptyBody:        codes.InvalidArgument,
-	e.ErrQuestionUserIDZero:     codes.InvalidArgument,
-	e.ErrQuestionNotFound:       codes.NotFound,
+	e.ErrQuestionEmptyBody:            codes.InvalidArgument,
+	e.ErrQuestionMissingOptions:       codes.InvalidArgument,
+	e.ErrQuestionMissingCorrectOption: codes.InvalidArgument,
+	e.ErrOptionEmptyBody:              codes.InvalidArgument,
+	e.ErrQuestionUserIDZero:           codes.InvalidArgument,
+	e.ErrQuestionNotFound:             codes.NotFound,
 }
 
 type GRPCError struct {

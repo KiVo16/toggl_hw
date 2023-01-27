@@ -32,6 +32,10 @@ func TestCreateQuestion_Handle(t *testing.T) {
 						Body:    "test",
 						Correct: true,
 					},
+					model.Option{
+						Body:    "test2",
+						Correct: false,
+					},
 				},
 			},
 			beforeTest: func(r *interfaces.MockRepository) error {
@@ -52,6 +56,28 @@ func TestCreateQuestion_Handle(t *testing.T) {
 			err: errors.ErrQuestionMissingOptions,
 		},
 		{
+			name: "create question without correct option",
+			q: model.Question{
+				ID:     1,
+				UserID: testUserId,
+				Body:   "test",
+				Options: []model.Option{
+					model.Option{
+						Body:    "test",
+						Correct: false,
+					},
+					model.Option{
+						Body:    "test2",
+						Correct: false,
+					},
+				},
+			},
+			beforeTest: func(r *interfaces.MockRepository) error {
+				return nil
+			},
+			err: errors.ErrQuestionMissingCorrectOption,
+		},
+		{
 			name: "create question",
 			q: model.Question{
 				ID:     1,
@@ -61,6 +87,10 @@ func TestCreateQuestion_Handle(t *testing.T) {
 					model.Option{
 						Body:    "test",
 						Correct: true,
+					},
+					model.Option{
+						Body:    "test2",
+						Correct: false,
 					},
 				},
 			},
