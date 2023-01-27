@@ -8,3 +8,4 @@ auth:
 
 db:
   file: "test.db"
+  migrationsPath: "/home/jacob/toggl/infrastructure/db/sqlite/migrations"

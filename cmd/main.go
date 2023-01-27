@@ -23,6 +23,8 @@ import (
 )
 
 func main() {
+	// also wire can be used for dependency injection
+
 	conf, err := config.LoadAndValidateConfig()
 	if err != nil {
 		log.Fatal(err)
@@ -32,7 +34,7 @@ func main() {
 	authConf := conf.Auth
 
 	ctx, cancelMainCtx := context.WithCancel(context.Background())
-	sqlLite, err := db.NewSQLiteDB(ctx, db.WithFile(dbConf.File))
+	sqlLite, err := db.NewSQLiteDB(ctx, db.WithFile(dbConf.File), db.WithMigrationsPath(dbConf.MigrationsPath))
 	if err != nil {
 		log.Fatal(err)
 	}

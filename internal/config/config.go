@@ -28,6 +28,11 @@ func (c Config) validate() error {
 		return err
 	}
 
+	err = c.Database.validate()
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -71,5 +76,13 @@ func (c AuthConfig) validate() error {
 }
 
 type DBConfig struct {
-	File string `mapstructure:"file"`
+	File           string `mapstructure:"file"`
+	MigrationsPath string `mapstructure:"migrationsPath"`
+}
+
+func (c DBConfig) validate() error {
+	if len(c.MigrationsPath) == 0 {
+		return fmt.Errorf("migrationsPath cannot be empty")
+	}
+	return nil
 }

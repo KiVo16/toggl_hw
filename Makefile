@@ -1,3 +1,5 @@
+ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
+
 openapi:
 	oapi-codegen -old-config-style -generate chi-server -o ./ports/http/openapi_server.gen.go -package ports ./api/openapi/api.yml
 	oapi-codegen -old-config-style -generate types -o ./ports/http/openapi_types.gen.go -package ports ./api/openapi/api.yml
@@ -24,3 +26,18 @@ build-binary: test
 
 docker-build: test
 	docker build -t toggl-build .
+
+
+# docker compose would be a better choice if another database (not single file) was used, such as postgres
+docker-run-dev: docker-build
+	docker run \
+	-p 3000:3000 \
+	-v $(ROOT_DIR)/docker_temp/sqlite:/app/sqlite \
+	-e PORT=3000 \
+	-e API_HOST="0.0.0.0" \
+	-e API_MODE="http" \
+	-e AUTH_JWTSECRET="secret_dev" \
+	-e DB_FILE="/app/sqlite/test.db" \
+	-e DB_MIGRATIONSPATH="/app/migrations/sqlite" \
+	toggl-build
+

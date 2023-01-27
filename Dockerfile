@@ -13,5 +13,6 @@ RUN mkdir /app
 WORKDIR /app
  
 COPY --from=BUILDER /go/src/app/build/build .
+COPY --from=BUILDER /go/src/app/infrastructure/db/sqlite/migrations ./migrations/sqlite
 
 CMD ["./build"]

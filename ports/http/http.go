@@ -81,6 +81,7 @@ func (s HttpServer) DeleteQuestion(w http.ResponseWriter, r *http.Request, id in
 		return
 	}
 
+	render.Respond(w, r, struct{}{})
 	w.WriteHeader(http.StatusOK)
 }
 

@@ -17,19 +17,22 @@ import (
 )
 
 type SQLiteDB struct {
-	file string
+	file           string
+	migrationsPath string
 
-	db *bun.DB
+	sql *bun.DB
 }
 
 func NewSQLiteDB(ctx context.Context, opts ...SQLiteDBOption) (*SQLiteDB, error) {
 
 	const (
-		defaultFile = "test.db"
+		defaultFile          = "test.db"
+		defaultMigrationPath = ""
 	)
 
 	db := &SQLiteDB{
-		file: defaultFile,
+		file:           defaultFile,
+		migrationsPath: defaultMigrationPath,
 	}
 
 	for _, opt := range opts {
@@ -80,13 +83,15 @@ func (db *SQLiteDB) connect() error {
 		return err
 	}
 
-	db.db = bun.NewDB(sqldb, sqlitedialect.New())
+	db.sql = bun.NewDB(sqldb, sqlitedialect.New())
 
 	log.Println("[db] connected")
 
-	err = db.runMigration()
-	if err != nil {
-		return err
+	if len(db.migrationsPath) > 0 {
+		err = db.runMigration()
+		if err != nil {
+			return err
+		}
 	}
 
 	log.Println("[db] migration up")
@@ -95,12 +100,12 @@ func (db *SQLiteDB) connect() error {
 }
 
 func (db *SQLiteDB) close() error {
-	return db.db.Close()
+	return db.sql.Close()
 }
 
 func (db SQLiteDB) runMigration() error {
-	migrationFiles := "file://infrastructure/db/sqlite/migrations"
-	driver, err := sqlite3.WithInstance(db.db.DB, &sqlite3.Config{})
+	migrationFiles := fmt.Sprintf("file://%s", db.migrationsPath)
+	driver, err := sqlite3.WithInstance(db.sql.DB, &sqlite3.Config{})
 	if err != nil {
 		return err
 	}

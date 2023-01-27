@@ -13,7 +13,7 @@ import (
 func (db SQLiteDB) CreateQuestion(ctx context.Context, question model.Question) (*model.Question, error) {
 	q := NewQuestion(question)
 
-	err := db.db.RunInTx(ctx, &sql.TxOptions{}, func(ctx context.Context, tx bun.Tx) error {
+	err := db.sql.RunInTx(ctx, &sql.TxOptions{}, func(ctx context.Context, tx bun.Tx) error {
 		return db.insertQuestionTX(ctx, tx, q)
 	})
 
@@ -34,7 +34,7 @@ func (db SQLiteDB) DeleteQuestionByID(ctx context.Context, userId, id int) error
 		return err
 	}
 
-	_, err = db.db.NewDelete().
+	_, err = db.sql.NewDelete().
 		Model(q).
 		WherePK().
 		Exec(ctx)
@@ -47,7 +47,7 @@ func (db SQLiteDB) GetQuestions(ctx context.Context, userId int, pages paginatio
 
 	limit, offset := getLimitOffsetFromModelPagination(pages)
 
-	err := db.db.NewSelect().
+	err := db.sql.NewSelect().
 		Model(&list).
 		Where("user_id = ?", userId).
 		Relation("Options").
@@ -85,9 +85,9 @@ func (db SQLiteDB) UpdateQuestion(ctx context.Context, userId, id int, updateFn 
 
 	q = NewQuestion(modelQuestion)
 
-	err = db.db.RunInTx(ctx, &sql.TxOptions{}, func(ctx context.Context, tx bun.Tx) error {
+	err = db.sql.RunInTx(ctx, &sql.TxOptions{}, func(ctx context.Context, tx bun.Tx) error {
 
-		_, err := db.db.NewDelete().
+		_, err := db.sql.NewDelete().
 			Model(q).
 			WherePK().
 			Exec(ctx)

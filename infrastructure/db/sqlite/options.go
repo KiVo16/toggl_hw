@@ -7,3 +7,9 @@ func WithFile(file string) SQLiteDBOption {
 		db.file = file
 	}
 }
+
+func WithMigrationsPath(migrationsPath string) SQLiteDBOption {
+	return func(db *SQLiteDB) {
+		db.migrationsPath = migrationsPath
+	}
+}

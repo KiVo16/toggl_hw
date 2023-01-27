@@ -9,7 +9,7 @@ import (
 func (db SQLiteDB) getQuestion(ctx context.Context, userId, id int64) (*Question, error) {
 	q := new(Question)
 
-	err := db.db.NewSelect().
+	err := db.sql.NewSelect().
 		Model(q).
 		Where("id = ?", id).
 		Where("user_id = ?", userId).

@@ -40,7 +40,17 @@ func LoadAndValidateConfig() (*Config, error) {
 		return nil, err
 	}
 
+	err = bindEnv("api.mode", "API_MODE")
+	if err != nil {
+		return nil, err
+	}
+
 	err = bindEnv("auth.jwtSecret", "AUTH_JWTSECRET")
+	if err != nil {
+		return nil, err
+	}
+
+	err = bindEnv("db.migrationsPath", "DB_MIGRATIONS_PATH")
 	if err != nil {
 		return nil, err
 	}
