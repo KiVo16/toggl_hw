@@ -12,9 +12,15 @@ proto:
 test:
 	go test ./...
 
-build-binary:
+build-single: test
+	go build -o ./build/build ./cmd/main.go
+
+build-binary: test
 	GOOS=linux GOARCH=arm64 go build -o ./build/build-linux-arm64 ./cmd/main.go && \
 	GOOS=linux GOARCH=amd64 go build -o ./build/build-linux-amd64 ./cmd/main.go && \
 	GOOS=linux GOARCH=386 go build -o ./build/build-linux-386 ./cmd/main.go && \
 	GOOS=windows GOARCH=386 go build -o ./build/build-windows-386 ./cmd/main.go && \
 	GOOS=windows GOARCH=amd64 go build -o ./build/build-windows-amd64 ./cmd/main.go	
+
+docker-build: test
+	docker build -t toggl-build .
