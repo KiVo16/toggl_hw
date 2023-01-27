@@ -35,7 +35,7 @@ Token providing method depending on `Mode (grpc, http)`
 |   Mode             |Method     |
 |----------------|---------|
 | `http` | `Authorization` as Bearer token|
-| `grpc` | Pass token in `authorization` metadata|
+| `grpc` | Pass Bearer token in `authorization` metadata|
 # How to start?
 
        git clone https://github.com/KiVo16/toggl_hw.git
