@@ -1,6 +1,6 @@
--- Up
 CREATE TABLE questions (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,
     body TEXT
 );
 
@@ -14,7 +14,3 @@ CREATE TABLE questions_options (
         REFERENCES questions (id)
         ON DELETE CASCADE 
 );
-
--- Down
-DROP TABLE questions_options;
-DROP TABLE questions;

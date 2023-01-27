@@ -1,23 +1,19 @@
 package model
 
 import (
-	"errors"
+	e "base/internal/errors"
 	"strings"
 )
 
-var (
-	ErrOptionEmptyBody = errors.New("errOptionEmptyBody")
-)
-
 type Option struct {
-	Id      int
+	ID      int
 	Body    string
 	Correct bool
 }
 
 func (o Option) Validate() error {
 	if len(strings.TrimSpace(o.Body)) == 0 {
-		return ErrOptionEmptyBody
+		return e.ErrOptionEmptyBody
 	}
 	return nil
 }

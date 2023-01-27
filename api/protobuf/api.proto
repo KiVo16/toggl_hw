@@ -1,0 +1,75 @@
+syntax = "proto3";
+
+package toggl;
+
+option go_package = ".toggl";
+
+import "google/protobuf/empty.proto";
+
+service QuestionsService {
+  rpc CreateQuestion(CreateQuestionRequest) returns (CreateQuestionResponse) {}
+  rpc DeleteQuestion(DeleteQuestionRequest) returns (google.protobuf.Empty) {}
+  rpc GetQuestions(GetQuestionsRequest) returns (GetQuestionsResponse) {}
+  rpc UpdateQuestion(UpdateQuestionRequest) returns (UpdateQuestionResponse) {}
+}
+
+// REQUESTS
+message CreateQuestionRequest {
+    Question question = 1;
+}
+
+message DeleteQuestionRequest {
+    int64 id = 1;
+}
+
+message GetQuestionsRequest {
+    Pagination pagination = 1;
+}
+
+message UpdateQuestionRequest {
+    enum UpdateProps {
+        BODY = 0;
+        OPTIONS = 1;
+    }
+
+    int64 id = 1;
+    QuestionRef ref = 2;
+    repeated UpdateProps props_to_update = 3;
+}
+
+// RESPONSE
+message CreateQuestionResponse {
+    Question question = 1;
+}
+
+message GetQuestionsResponse {
+    repeated Question questions = 1;
+}
+
+message UpdateQuestionResponse {
+    Question question = 1;
+}
+
+
+// COMMON
+message Question {
+    int64 id = 1;
+    string body = 2;
+    repeated Option options = 3;
+}
+
+message Option {
+    int64 id = 1;
+    string body = 2;
+    bool correct = 3;
+}
+
+message QuestionRef {
+    string body = 1;
+    repeated Option options = 2;
+}
+
+message Pagination {
+    int32 page_size = 1;
+    int32 page = 2;
+}

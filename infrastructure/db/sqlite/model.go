@@ -10,14 +10,16 @@ type Question struct {
 	bun.BaseModel `bun:"table:questions,alias:q"`
 
 	ID      int64     `bun:"id,pk,autoincrement"`
+	UserID  int64     `bun:"user_id"`
 	Body    string    `bun:"body"`
 	Options []*Option `bun:"rel:has-many,join:id=question_id"`
 }
 
 func (q Question) ToModel() model.Question {
 	question := model.Question{
-		Id:   int(q.ID),
-		Body: q.Body,
+		ID:     int(q.ID),
+		UserID: int(q.UserID),
+		Body:   q.Body,
 	}
 
 	for _, o := range q.Options {
@@ -38,7 +40,7 @@ type Option struct {
 
 func (o Option) ToModel() model.Option {
 	return model.Option{
-		Id:      int(o.ID),
+		ID:      int(o.ID),
 		Body:    o.Body,
 		Correct: o.Correct,
 	}
@@ -46,11 +48,14 @@ func (o Option) ToModel() model.Option {
 
 func NewQuestion(q model.Question) *Question {
 	question := Question{
-		Body: q.Body,
+		ID:     int64(q.ID),
+		UserID: int64(q.UserID),
+		Body:   q.Body,
 	}
 
 	for _, o := range q.Options {
 		option := Option{
+			ID:      int64(o.ID),
 			Body:    o.Body,
 			Correct: o.Correct,
 		}

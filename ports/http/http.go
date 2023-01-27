@@ -3,8 +3,9 @@ package ports
 import (
 	"base/internal/app"
 	"base/internal/app/handlers"
+	"base/internal/domain/model"
+	e "base/pkg/http/errors"
 	"base/pkg/pagination"
-	"fmt"
 	"net/http"
 
 	"github.com/go-chi/render"
@@ -24,32 +25,41 @@ func (s HttpServer) CreateQuestion(w http.ResponseWriter, r *http.Request) {
 	question := Question{}
 	err := render.Decode(r, &question)
 	if err != nil {
-		http.Error(w, "invalid-request", http.StatusBadRequest)
+		e.NewHttpError(err).
+			WithCode(http.StatusInternalServerError).
+			Handle(w)
+
 		return
 	}
 
 	q := NewQuestionToModel(question)
 
-	_, err = s.app.Handlers.CreateQuestion.Handle(r.Context(), handlers.CreateQuestionRequest{
+	fQuestion, err := s.app.Handlers.CreateQuestion.Handle(r.Context(), handlers.CreateQuestionRequest{
 		Question: q,
 	})
 	if err != nil {
-		http.Error(w, fmt.Sprintf("internal: %v", err), http.StatusInternalServerError)
+		e.NewHttpError(err).Handle(w)
 		return
 	}
 
+	render.Respond(w, r, NewQuestionFromModel(*fQuestion))
 	w.WriteHeader(http.StatusCreated)
 }
 
 func (s HttpServer) GetQuestions(w http.ResponseWriter, r *http.Request, params GetQuestionsParams) {
-	questions, err := s.app.Handlers.GetQuestions.Handle(r.Context(), handlers.GetQuestionsRequest{
-		Pages: pagination.Pagination{
-			// Limit:  *params.Limit,
-			// Offset: *params.Offset,
-		},
-	})
+	req := handlers.GetQuestionsRequest{Pages: pagination.Pagination{}}
+
+	if params.PageSize != nil {
+		req.Pages.PageSize = *params.PageSize
+	}
+
+	if params.Page != nil {
+		req.Pages.Page = *params.Page
+	}
+
+	questions, err := s.app.Handlers.GetQuestions.Handle(r.Context(), req)
 	if err != nil {
-		http.Error(w, fmt.Sprintf("internal: %v", err), http.StatusInternalServerError)
+		e.NewHttpError(err).Handle(w)
 		return
 	}
 
@@ -67,7 +77,7 @@ func (s HttpServer) DeleteQuestion(w http.ResponseWriter, r *http.Request, id in
 		ID: id,
 	})
 	if err != nil {
-		http.Error(w, fmt.Sprintf("internal: %v", err), http.StatusInternalServerError)
+		e.NewHttpError(err).Handle(w)
 		return
 	}
 
@@ -75,13 +85,36 @@ func (s HttpServer) DeleteQuestion(w http.ResponseWriter, r *http.Request, id in
 }
 
 func (s HttpServer) UpdateQuestion(w http.ResponseWriter, r *http.Request, id int) {
-	_, err := s.app.Handlers.DeleteQuestion.Handle(r.Context(), handlers.DeleteQuestionRequest{
-		ID: id,
-	})
+	ref := QuestionRef{}
+	err := render.Decode(r, &ref)
 	if err != nil {
-		http.Error(w, fmt.Sprintf("internal: %v", err), http.StatusInternalServerError)
+		e.NewHttpError(err).
+			WithCode(http.StatusInternalServerError).
+			Handle(w)
+
 		return
 	}
 
+	req := handlers.UpdateQuestionRequest{
+		ID:   id,
+		Body: ref.Body,
+	}
+
+	if ref.Options != nil {
+		options := make([]model.Option, len(*ref.Options))
+		for i, o := range *ref.Options {
+			options[i] = NewOptionToModel(o)
+		}
+
+		req.Options = &options
+	}
+
+	fQuestion, err := s.app.Handlers.UpdateQuestion.Handle(r.Context(), req)
+	if err != nil {
+		e.NewHttpError(err).Handle(w)
+		return
+	}
+
+	render.Respond(w, r, NewQuestionFromModel(*fQuestion))
 	w.WriteHeader(http.StatusOK)
 }

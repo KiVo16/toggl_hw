@@ -19,14 +19,22 @@ type Question struct {
 	Options *[]Option `json:"options,omitempty"`
 }
 
+// QuestionRef defines model for QuestionRef.
+type QuestionRef struct {
+	Body *string `json:"body,omitempty"`
+
+	// Options Options associated with question
+	Options *[]Option `json:"options,omitempty"`
+}
+
 // GetQuestionsParams defines parameters for GetQuestions.
 type GetQuestionsParams struct {
-	Limit  *int `form:"limit,omitempty" json:"limit,omitempty"`
-	Offset *int `form:"offset,omitempty" json:"offset,omitempty"`
+	PageSize *int `form:"pageSize,omitempty" json:"pageSize,omitempty"`
+	Page     *int `form:"page,omitempty" json:"page,omitempty"`
 }
 
 // CreateQuestionJSONRequestBody defines body for CreateQuestion for application/json ContentType.
 type CreateQuestionJSONRequestBody = Question
 
 // UpdateQuestionJSONRequestBody defines body for UpdateQuestion for application/json ContentType.
-type UpdateQuestionJSONRequestBody = Question
+type UpdateQuestionJSONRequestBody = QuestionRef

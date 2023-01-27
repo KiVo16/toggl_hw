@@ -1,9 +1,11 @@
 package handlers
 
 import (
+	"base/internal/constants"
 	"base/internal/domain/model"
 	"base/internal/interfaces"
 	"base/pkg/pagination"
+	"base/pkg/utils"
 	"context"
 )
 
@@ -28,6 +30,9 @@ func NewGetQuestionsHandler(repo interfaces.Repository) GetQuestionsHandler {
 }
 
 func (h getQuestionsHandler) Handle(ctx context.Context, req GetQuestionsRequest) (model.QuestionList, error) {
-	list, err := h.repo.GetQuestions(ctx, req.Pages)
+	req.Pages.DefaultIfNotSet()
+	userID := utils.GetIntFromContext(ctx, constants.ContextKeyUserID, 0)
+
+	list, err := h.repo.GetQuestions(ctx, userID, req.Pages)
 	return list, err
 }

@@ -1,17 +1,13 @@
 package model
 
 import (
-	"errors"
+	e "base/internal/errors"
 	"strings"
 )
 
-var (
-	ErrQuestionMissingOptions = errors.New("errQuestionMissingOptions")
-	ErrQuestionEmptyBody      = errors.New("errQuestionEmptyBody")
-)
-
 type Question struct {
-	Id      int
+	ID      int
+	UserID  int
 	Body    string
 	Options []Option
 }
@@ -22,11 +18,15 @@ func (q Question) Validate() error {
 
 	// it's just for an example - it probably should accept generating question without options
 	if len(q.Options) == 0 {
-		return ErrQuestionMissingOptions
+		return e.ErrQuestionMissingOptions
+	}
+
+	if q.UserID == 0 {
+		return e.ErrQuestionUserIDZero
 	}
 
 	if len(strings.TrimSpace(q.Body)) == 0 {
-		return ErrQuestionEmptyBody
+		return e.ErrQuestionEmptyBody
 	}
 
 	for _, o := range q.Options {

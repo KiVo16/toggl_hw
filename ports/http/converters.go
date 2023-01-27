@@ -10,8 +10,8 @@ func NewOptionFromModel(o model.Option) Option {
 		Correct: o.Correct,
 	}
 
-	if o.Id != 0 {
-		option.Id = &o.Id
+	if o.ID != 0 {
+		option.Id = &o.ID
 	}
 
 	return option
@@ -31,8 +31,8 @@ func NewQuestionFromModel(q model.Question) Question {
 		question.Options = &options
 	}
 
-	if q.Id != 0 {
-		question.Id = &q.Id
+	if q.ID != 0 {
+		question.Id = &q.ID
 	}
 
 	return question
@@ -45,7 +45,7 @@ func NewOptionToModel(o Option) model.Option {
 	}
 
 	if o.Id != nil {
-		option.Id = *o.Id
+		option.ID = *o.Id
 	}
 
 	return option
@@ -57,7 +57,7 @@ func NewQuestionToModel(q Question) model.Question {
 	}
 
 	if q.Id != nil {
-		question.Id = *q.Id
+		question.ID = *q.Id
 	}
 
 	if q.Options != nil {

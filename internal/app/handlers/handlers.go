@@ -14,6 +14,7 @@ type Handlers struct {
 	CreateQuestion CreateQuestionHandler
 	DeleteQuestion DeleteQuestionHandler
 	GetQuestions   GetQuestionsHandler
+	UpdateQuestion UpdateQuestionHandler
 }
 
 func NewHandlers(repo interfaces.Repository) Handlers {
@@ -22,5 +23,6 @@ func NewHandlers(repo interfaces.Repository) Handlers {
 		CreateQuestion: NewCreateQuestionHandler(repo),
 		DeleteQuestion: NewDeleteQuestionHandler(repo),
 		GetQuestions:   NewGetQuestionsHandler(repo),
+		UpdateQuestion: NewUpdateQuestionHandler(repo),
 	}
 }

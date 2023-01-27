@@ -25,16 +25,20 @@ paths:
       responses:
         '201':
           description: Question created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Question'
     get:
       operation: getQuestions
       summary: Get Questions
       parameters:
         - in: query
-          name: limit
+          name: pageSize
           schema:
             type: integer
         - in: query
-          name: offset
+          name: page
           schema:
             type: integer
       responses:
@@ -72,10 +76,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Question'
+              $ref: '#/components/schemas/QuestionRef'
       responses:
         '200':
           description: Question updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Question'
 
 components:
   securitySchemes:
@@ -91,6 +99,17 @@ components:
       properties:
         id:
           type: integer
+        body:
+          type: string
+        options:
+          type: array
+          items: 
+            $ref: '#/components/schemas/Option'
+          description: Options associated with question
+
+    QuestionRef:
+      type: object
+      properties:
         body:
           type: string
         options:

@@ -1,7 +1,9 @@
 package handlers
 
 import (
+	"base/internal/constants"
 	"base/internal/interfaces"
+	"base/pkg/utils"
 	"context"
 )
 
@@ -26,6 +28,8 @@ func NewDeleteQuestionHandler(repo interfaces.Repository) DeleteQuestionHandler 
 }
 
 func (h deleteQuestionHandler) Handle(ctx context.Context, req DeleteQuestionRequest) (interface{}, error) {
-	err := h.repo.DeleteQuestionByID(ctx, req.ID)
+	userID := utils.GetIntFromContext(ctx, constants.ContextKeyUserID, 0)
+
+	err := h.repo.DeleteQuestionByID(ctx, userID, req.ID)
 	return nil, err
 }
