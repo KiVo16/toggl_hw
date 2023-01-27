@@ -25,6 +25,9 @@ API contains 2 use case tests. It's a very simple crud so there is not much to t
 # SQLite3
 API enabled `Foreign Key` support on every connection, so in order to properly delete data manually by `sqlite3 [db file name]` you have to execute `PRAGMA foreign_keys = ON;` before performing any deletion.
 
+# Question updates
+The endpoint is provided at `PATCH` method in order to enable partial updates. For example, the body might be updated without updating options.
+
 # How to start?
 
        git clone https://github.com/KiVo16/toggl_hw.git
