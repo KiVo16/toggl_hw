@@ -42,4 +42,4 @@ Token providing method depending on `Mode (grpc, http)`
        cd toggl_hw
        make docker-run-dev
        
-  The above commands run Docker container which shares port `3000 ` with the host and API can be accessed on that port. Also `$(pwd)/docker/sqlite` folder is created and attached as volume to make the file available for convenient previewing. 
+  The above commands run Docker container which shares port `3000` with the host and API can be accessed on that port. Also `$(pwd)/docker/sqlite` folder is created and attached as volume to make the db file available for convenient previewing. 
